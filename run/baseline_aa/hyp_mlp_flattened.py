@@ -1,8 +1,9 @@
 import torch
+
 from data.pair_loader import pair_loader
 from data.read_data import read_aa_sequences
-from model.layers.hyperbolic.hyp_snn import HypSNN
 from model.layers.hyperbolic.hyp_linear import HypMLP
+from model.layers.hyperbolic.hyp_snn import HypSNN
 from run.embedding import LinearEmbedding
 from run.train import train
 

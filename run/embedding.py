@@ -1,6 +1,14 @@
+"""
+    Part of this code was adapted from "Deep Squared Euclidean
+    Approximation to the Levenshtein Distance for DNA Storage"
+    by 	A. J. X. Guo, C. Liang, and Q.-H. Hou.
+    for more details visit https://github.com/aalennku/DSEE
+"""
+
 import torch
 import torch.nn.functional as F
 from torch import nn
+
 
 class LinearEmbedding(torch.nn.Module):
     def __init__(self, model):
@@ -9,6 +17,7 @@ class LinearEmbedding(torch.nn.Module):
 
     def forward(self, X):
         return self.model(X.flatten(-2))
+
 
 class HiddenEmbedding(torch.nn.Module):
     def __init__(self, model):
@@ -27,6 +36,7 @@ class UnfoldingEmbedding(torch.nn.Module):
     def forward(self, X):
         return self.model(X)[0].flatten(-2)
 
+
 class DSEE_Embedding(torch.nn.Module):
     def __init__(self, model):
         super(DSEE_Embedding, self).__init__()
@@ -34,6 +44,7 @@ class DSEE_Embedding(torch.nn.Module):
 
     def forward(self, X):
         return self.model(X.mT)
+
 
 class FCEmbedding(torch.nn.Module):
     def __init__(self, model, fc):
@@ -43,7 +54,6 @@ class FCEmbedding(torch.nn.Module):
 
     def forward(self, X):
         return self.fc(self.model(X)[0].flatten(-2))
-
 
 
 class Twin(torch.nn.Module):
@@ -70,7 +80,6 @@ class Twin(torch.nn.Module):
             return torch.sum(torch.abs(xx - yy), dim=-1)
         elif self.metric == 'EU':
             return torch.linalg.norm(xx - yy, dim=-1)
-
 
 
 class M_GRU(nn.Module):

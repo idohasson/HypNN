@@ -1,9 +1,11 @@
 import torch
 from torch import nn
+
 from data.pair_loader import pair_loader
 from data.read_data import read_nt_sequences
-from run.train import train
 from model.layers.hyperbolic.hyp_snn import HypSNN
+from run.train import train
+
 
 class NeuroSEED_GRU(nn.Module):
 

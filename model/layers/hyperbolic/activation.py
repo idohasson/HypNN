@@ -51,4 +51,3 @@ class HypDropout(nn.Module):
         xt = expmap0(xt)
         xt = projection(xt)
         return xt
-

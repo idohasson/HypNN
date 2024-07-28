@@ -1,4 +1,5 @@
 import torch
+
 from data.pair_loader import pair_loader
 from data.read_data import read_nt_sequences
 from run.embedding import DSEE_Embedding, Twin, M_RNN

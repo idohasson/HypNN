@@ -1,7 +1,8 @@
 import csv
+from itertools import repeat
 
 import torch
-from itertools import repeat
+
 
 def train(model, train_loader, test_loader, epochs=500, model_name=None):
     model_path = '../saved_models/' + model_name + '.pth' if model_name is not None else None

@@ -1,27 +1,11 @@
 import torch
-from torch import nn
 
 from model.layers.baseline.recurrent import Recurrent, RecurrentCell
 
 
 class LSTMCell(RecurrentCell):
     def __init__(self, input_size, hidden_size, dropout, activation):
-        super(RecurrentCell, self).__init__()
-        self.hidden_size = hidden_size
-        k = 1 / hidden_size ** .5
-        self.Wx = nn.Parameter(torch.empty(input_size, 4 * hidden_size).uniform_(-k, k))
-        self.Wh = nn.Parameter(torch.empty(hidden_size, 4 * hidden_size).uniform_(-k, k))
-        self.bx = nn.Parameter(torch.empty(1, 4 * hidden_size).zero_())
-        self.bh = nn.Parameter(torch.empty(1, 4 * hidden_size).zero_())
-        self.dropout = dropout
-        if activation == 'tanh':
-            self.activation = nn.Tanh()
-        elif activation == 'relu':
-            self.activation = nn.ReLU()
-        elif activation == 'sigmoid':
-            self.activation = nn.Sigmoid()
-        else:
-            self.activation = None
+        super().__init__(input_size, hidden_size, 4 * hidden_size, dropout, activation)
 
     def recurrent_step(self, xi, state):
         if not isinstance(state, tuple):
@@ -48,7 +32,7 @@ class LSTM(Recurrent):
     def __init__(self, input_size, hidden_size, num_layers=1, bidirectional=False, dropout=.0, activation="tanh",
                  gradual=True):
         super(LSTM, self).__init__(input_size, hidden_size, num_layers, bidirectional, dropout, activation, gradual,
-                                      LSTMCell)
+                                   LSTMCell)
 
     def forward(self, X, hidden_states=None):
         return super(LSTM, self).forward(X, hidden_states)

@@ -2,12 +2,30 @@ import torch
 from torch import nn
 from torch.autograd import Variable
 
+from model.layers.hyperbolic.activation import HypReLU, HypSigmoid, HypTanh, HypDropout
+from model.layers.hyperbolic.hyp_utils import expmap0, projection
 from model.layers.utils import layer_size
-from model.layers.hyperbolic.hyp_utils import expmap0
+
 
 class HypRecurrentCell(nn.Module):
-    def __init__(self):
+    def __init__(self, input_size, input_hidden, hidden_hidden, dropout, activation):
         super(HypRecurrentCell, self).__init__()
+        self.hidden_size = input_hidden
+        k = 1 / input_hidden ** .5
+        self.Wx = nn.Parameter(projection(expmap0(torch.empty(input_size, hidden_hidden).uniform_(-k, k))))
+        self.Wh = nn.Parameter(projection(expmap0(torch.empty(input_hidden, hidden_hidden).uniform_(-k, k))))
+        self.bx = nn.Parameter(torch.empty(1, hidden_hidden).zero_())
+        self.bh = nn.Parameter(torch.empty(1, hidden_hidden).zero_())
+
+        self.dropout = HypDropout(dropout)
+        if activation == 'tanh':
+            self.activation = HypTanh()
+        elif activation == 'relu':
+            self.activation = HypReLU()
+        elif activation == 'sigmoid':
+            self.activation = HypSigmoid()
+        else:
+            self.activation = None
 
     def init_hidden(self, batch_size):
         return Variable(torch.zeros(batch_size, self.hidden_size))

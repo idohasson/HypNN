@@ -6,8 +6,23 @@ from model.layers.utils import layer_size
 
 
 class RecurrentCell(nn.Module):
-    def __init__(self):
+    def __init__(self, input_size, input_hidden, hidden_hidden, dropout, activation):
         super(RecurrentCell, self).__init__()
+        self.hidden_size = input_hidden
+        k = 1 / input_hidden ** .5
+        self.Wx = nn.Parameter(torch.empty(input_size, hidden_hidden).uniform_(-k, k))
+        self.Wh = nn.Parameter(torch.empty(input_hidden, hidden_hidden).uniform_(-k, k))
+        self.bx = nn.Parameter(torch.empty(1, hidden_hidden).zero_())
+        self.bh = nn.Parameter(torch.empty(1, hidden_hidden).zero_())
+        self.dropout = dropout
+        if activation == 'tanh':
+            self.activation = nn.Tanh()
+        elif activation == 'relu':
+            self.activation = nn.ReLU()
+        elif activation == 'sigmoid':
+            self.activation = nn.Sigmoid()
+        else:
+            self.activation = None
 
     def init_hidden(self, batch_size):
         return Variable(torch.zeros(batch_size, self.hidden_size))

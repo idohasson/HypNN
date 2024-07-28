@@ -2,8 +2,8 @@ import torch
 
 from data.pair_loader import pair_loader
 from data.read_data import read_aa_sequences
-from model.layers.baseline.snn import SNN
 from model.layers.baseline.base_rnn import RNN
+from model.layers.baseline.snn import SNN
 from run.embedding import HiddenEmbedding
 from run.train import train
 

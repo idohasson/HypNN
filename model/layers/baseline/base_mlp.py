@@ -20,6 +20,8 @@ class Linear(nn.Module):
         if self.use_bias:
             x = x + self.bias
         return x
+
+
 class MLP(torch.nn.Module):
     def __init__(self, input_size, output_size, num_layers=1, bias=True, dropout=0., activation=None):
         super(MLP, self).__init__()
